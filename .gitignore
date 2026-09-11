@@ -1,0 +1,6 @@
+*.log
+avito/avito_wlp_results.json
+__pycache__/
+*.pyc
+warm-lead-report-*.md
+!reports/warm-lead-report-*.md

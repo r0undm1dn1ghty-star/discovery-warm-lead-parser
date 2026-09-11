@@ -1,0 +1,955 @@
+{
+  "ai-agents": {
+    "name": "ИИ-агенты и внедрение ИИ",
+    "fl": "ai-iskusstvenniy-intellekt",
+    "kw": 83,
+    "wl": null,
+    "tg": [
+      "freelance_zakazy",
+      "digitaltender",
+      "dddwork",
+      "FrWork3",
+      "freelancetaverna"
+    ],
+    "queries": [
+      "внедрение ии",
+      "ии-агент",
+      "нейросеть в бизнес"
+    ],
+    "sources_extra": [
+      "kadrof"
+    ]
+  },
+  "chatbots": {
+    "name": "Чат-боты и мессенджеры",
+    "fl": "programmirovanie/razrabotka-chat-botov",
+    "kw": 11,
+    "wl": "sozdanie-botov",
+    "tg": [
+      "FrWork3",
+      "freelance7",
+      "freelancetaverna",
+      "freelance_zakazy"
+    ],
+    "queries": [
+      "нужен бот",
+      "телеграм бот",
+      "чат бот"
+    ],
+    "sources_extra": [
+      "kadrof"
+    ]
+  },
+  "parsing": {
+    "name": "Парсинг данных",
+    "fl": "programmirovanie/parsing-dannyih",
+    "kw": 11,
+    "wl": "parsing-dannikh",
+    "tg": [],
+    "queries": [
+      "спарсить данные",
+      "парсер сайта",
+      "парсинг"
+    ],
+    "sources_extra": [
+      "kadrof"
+    ]
+  },
+  "business-automation": {
+    "name": "Автоматизация бизнеса и CRM",
+    "fl": "avtomatizaciya-biznesa",
+    "kw": 83,
+    "wl": null,
+    "tg": [],
+    "queries": [
+      "автоматизация процессов",
+      "интеграция crm",
+      "битрикс24"
+    ],
+    "sources_extra": [
+      "kadrof"
+    ]
+  },
+  "logo-identity": {
+    "name": "Логотипы и айдентика",
+    "fl": "dizajn",
+    "kw": 15,
+    "wl": "sozdanie-logotipov",
+    "tg": [
+      "free_Design1",
+      "freelance7",
+      "designhunters",
+      "zakaz_design",
+      "designbirzha"
+    ],
+    "queries": [
+      "логотип",
+      "фирменный стиль",
+      "айдентика бренда"
+    ],
+    "sources_extra": [
+      "kadrof"
+    ]
+  },
+  "web-design": {
+    "name": "Веб-дизайн и UI/UX",
+    "fl": "dizajn",
+    "kw": 15,
+    "wl": "dizain-saitov",
+    "tg": [
+      "free_Design1",
+      "designjobs_ru",
+      "jun_hi_vacancies",
+      "zakaz_design",
+      "designizer"
+    ],
+    "queries": [
+      "дизайн сайта",
+      "ux ui",
+      "макет figma"
+    ],
+    "sources_extra": [
+      "kadrof"
+    ]
+  },
+  "motion": {
+    "name": "Моушн и анимация",
+    "fl": "animaciya",
+    "kw": 7,
+    "wl": "montazh-videorolikov",
+    "tg": [
+      "video_editing_jobs",
+      "cgfreelance"
+    ],
+    "queries": [
+      "моушн дизайн",
+      "анимация ролика",
+      "motion design"
+    ],
+    "sources_extra": [
+      "kadrof"
+    ]
+  },
+  "illustration-3d": {
+    "name": "Графика 2D/3D",
+    "fl": "risunki-i-illustracii",
+    "kw": 15,
+    "wl": null,
+    "tg": [
+      "cgfreelance"
+    ],
+    "queries": [
+      "иллюстрация",
+      "3d модель",
+      "рендер сцены",
+      "нарисовать",
+      "арт",
+      "персонаж",
+      "обложка",
+      "рендер",
+      "визуализация"
+    ],
+    "sources_extra": [
+      "kadrof",
+      "illustrators"
+    ]
+  },
+  "presentations": {
+    "name": "Презентации и инфографика",
+    "fl": "dizajn",
+    "kw": 15,
+    "wl": null,
+    "tg": [],
+    "queries": [
+      "презентация powerpoint",
+      "инфографика",
+      "оформление слайдов"
+    ],
+    "sources_extra": [
+      "kadrof"
+    ]
+  },
+  "photo": {
+    "name": "Фотография и обработка",
+    "fl": "audio-video-photo",
+    "kw": 7,
+    "wl": "redaktirovanie-izobrazhenii",
+    "tg": [],
+    "queries": [
+      "фотошоп обработка",
+      "ретушь фото",
+      "коллаж"
+    ],
+    "sources_extra": [
+      "kadrof"
+    ]
+  },
+  "sites-turnkey": {
+    "name": "Сайты под ключ",
+    "fl": "saity",
+    "kw": 11,
+    "wl": "sozdanie-saitov",
+    "tg": [
+      "FrWork3"
+    ],
+    "queries": [
+      "сайт под ключ",
+      "лендинг",
+      "интернет-магазин"
+    ],
+    "sources_extra": [
+      "kadrof"
+    ]
+  },
+  "site-fixes": {
+    "name": "Доработка сайтов и правки",
+    "fl": "programmirovanie",
+    "kw": 11,
+    "wl": "dorabotka-saitov",
+    "tg": [],
+    "queries": [
+      "доработать сайт",
+      "правки на сайте",
+      "исправить баг"
+    ],
+    "sources_extra": [
+      "kadrof"
+    ]
+  },
+  "python-dev": {
+    "name": "Python-разработка",
+    "fl": "programmirovanie/python",
+    "kw": 11,
+    "wl": null,
+    "tg": [
+      "pydevjob",
+      "job_python"
+    ],
+    "queries": [
+      "python скрипт",
+      "django",
+      "парсер на python"
+    ],
+    "sources_extra": [
+      "kadrof"
+    ]
+  },
+  "mobile-apps": {
+    "name": "Мобильные приложения",
+    "fl": "mobile",
+    "kw": 11,
+    "wl": "android",
+    "tg": [
+      "juniors_rabota_jobs"
+    ],
+    "queries": [
+      "мобильное приложение",
+      "android разработка",
+      "ios приложение"
+    ],
+    "sources_extra": [
+      "kadrof"
+    ]
+  },
+  "1c-accounting": {
+    "name": "1С и учётные системы",
+    "fl": "programmirovanie/1c-programmist",
+    "kw": 11,
+    "wl": "1c",
+    "tg": [],
+    "queries": [
+      "1с настройка",
+      "1с доработка",
+      "интеграция 1с"
+    ],
+    "sources_extra": [
+      "kadrof"
+    ]
+  },
+  "telegram-miniapps": {
+    "name": "Telegram Mini Apps",
+    "fl": "programmirovanie/razrabotka-chat-botov",
+    "kw": 11,
+    "wl": "telegram",
+    "tg": [
+      "freelancetaverna"
+    ],
+    "queries": [
+      "mini app",
+      "миниапп телеграм",
+      "webapp бот"
+    ],
+    "sources_extra": [
+      "kadrof"
+    ]
+  },
+  "ecommerce": {
+    "name": "Интернет-магазины",
+    "fl": "internet-magaziny",
+    "kw": 11,
+    "wl": null,
+    "tg": [],
+    "queries": [
+      "интернет-магазин",
+      "выгрузка товаров",
+      "карточки wildberries"
+    ],
+    "sources_extra": [
+      "kadrof"
+    ]
+  },
+  "dashboards": {
+    "name": "Дашборды и аналитика",
+    "fl": "programmirovanie",
+    "kw": 11,
+    "wl": null,
+    "tg": [],
+    "queries": [
+      "дашборд power bi",
+      "отчет excel",
+      "аналитика данных"
+    ],
+    "sources_extra": [
+      "kadrof"
+    ]
+  },
+  "copywriting": {
+    "name": "Копирайтинг и тексты",
+    "fl": "teksty",
+    "kw": 5,
+    "wl": "napisanie-statei",
+    "tg": [
+      "Work_copywriters",
+      "zakaz_copywriter",
+      "copy_go",
+      "textodromo",
+      "self_ma",
+      "glvrd_job"
+    ],
+    "queries": [
+      "текст для сайта",
+      "копирайтер",
+      "статья на заказ"
+    ],
+    "sources_extra": [
+      "kadrof"
+    ]
+  },
+  "translations": {
+    "name": "Переводы",
+    "fl": "teksty",
+    "kw": 5,
+    "wl": "perevod-tekstov",
+    "tg": [
+      "translations_ru"
+    ],
+    "queries": [
+      "перевод текста",
+      "переводчик английский",
+      "технический перевод"
+    ],
+    "sources_extra": [
+      "kadrof"
+    ]
+  },
+  "editing": {
+    "name": "Редактура и корректура",
+    "fl": "teksty",
+    "kw": 5,
+    "wl": null,
+    "tg": [
+      "textodromo"
+    ],
+    "queries": [
+      "редактура текста",
+      "корректура книги",
+      "вычитка"
+    ],
+    "sources_extra": [
+      "kadrof"
+    ]
+  },
+  "scripts-youtube": {
+    "name": "Сценарии и YouTube",
+    "fl": "teksty",
+    "kw": 5,
+    "wl": null,
+    "tg": [
+      "jobpower",
+      "rueventjob",
+      "Work4writers"
+    ],
+    "queries": [
+      "сценарий видео",
+      "сценарист ютуб",
+      "нарезка контента"
+    ],
+    "sources_extra": [
+      "kadrof"
+    ]
+  },
+  "seo": {
+    "name": "SEO и оптимизация",
+    "fl": "prodvizhenie-saitov-seo",
+    "kw": 17,
+    "wl": "seo",
+    "tg": [
+      "seohr",
+      "partnerkin_job"
+    ],
+    "queries": [
+      "seo оптимизация",
+      "сео продвижение",
+      "аудит сайта",
+      "продвижение сайта",
+      "seo",
+      "оптимизация",
+      "ссылки",
+      "крауд",
+      "pbn",
+      "outreach",
+      "позиции",
+      "трафик"
+    ],
+    "sources_extra": [
+      "kadrof",
+      "se-guru"
+    ]
+  },
+  "context-ads": {
+    "name": "Контекстная реклама",
+    "fl": "reklama-marketing",
+    "kw": 17,
+    "wl": null,
+    "tg": [
+      "target_ads",
+      "thepartnerkin"
+    ],
+    "queries": [
+      "яндекс директ",
+      "google ads",
+      "контекстная реклама",
+      "директ",
+      "реклама",
+      "кампани",
+      "объявлен",
+      "бм",
+      "мастер кампаний"
+    ],
+    "sources_extra": [
+      "kadrof",
+      "se-guru"
+    ]
+  },
+  "targeting": {
+    "name": "Таргет и медийка",
+    "fl": "reklama-marketing",
+    "kw": 17,
+    "wl": null,
+    "tg": [
+      "smmlancer"
+    ],
+    "queries": [
+      "таргет вк",
+      "vk ads",
+      "медийная реклама",
+      "таргет",
+      "реклама в телеграм",
+      "посевы",
+      "mytarget",
+      "аудитория",
+      "охваты",
+      "лиды",
+      "инструмент"
+    ],
+    "sources_extra": [
+      "kadrof",
+      "se-guru"
+    ]
+  },
+  "smm": {
+    "name": "SMM и соцсети",
+    "fl": "socialnye-seti",
+    "kw": 45,
+    "wl": null,
+    "tg": [
+      "smm_leads",
+      "vakanser_digital_smm",
+      "dnative_job",
+      "smmlancer",
+      "freelancetaverna"
+    ],
+    "queries": [
+      "ведение соцсетей",
+      "контент план",
+      "smm менеджер"
+    ],
+    "sources_extra": [
+      "kadrof"
+    ]
+  },
+  "email": {
+    "name": "Email-рассылки",
+    "fl": "reklama-marketing",
+    "kw": 45,
+    "wl": "rassilka-soobshchenii",
+    "tg": [],
+    "queries": [
+      "email рассылка",
+      " настройка unisender",
+      "в welcome серия"
+    ],
+    "sources_extra": [
+      "kadrof"
+    ]
+  },
+  "marketplaces": {
+    "name": "Маркетплейсы (WB/Ozon)",
+    "fl": "marketplace-management",
+    "kw": 83,
+    "wl": null,
+    "tg": [],
+    "queries": [
+      "wildberries администрирование",
+      "ozon менеджер",
+      "движение карточек"
+    ],
+    "sources_extra": [
+      "kadrof"
+    ]
+  },
+  "funnels-infoproduct": {
+    "name": "Инфопродукты и воронки",
+    "fl": "reklama-marketing",
+    "kw": 45,
+    "wl": null,
+    "tg": [],
+    "queries": [
+      "воронка продаж",
+      "лендинг курс",
+      "запуск инфопродукта"
+    ],
+    "sources_extra": [
+      "kadrof"
+    ]
+  },
+  "video-editing": {
+    "name": "Видеомонтаж",
+    "fl": "audio-video-photo",
+    "kw": 7,
+    "wl": "montazh-videorolikov",
+    "tg": [
+      "video_editing_jobs",
+      "rueventjob"
+    ],
+    "queries": [
+      "монтаж видео",
+      "рилс нарезка",
+      "клип смонтировать"
+    ],
+    "sources_extra": [
+      "kadrof"
+    ]
+  },
+  "video-shooting": {
+    "name": "Видеосъёмка",
+    "fl": "audio-video-photo",
+    "kw": 7,
+    "wl": null,
+    "tg": [
+      "rueventjob",
+      "jobpower"
+    ],
+    "queries": [
+      "видеосъемка",
+      "оператор на съёмку",
+      "репортаж"
+    ],
+    "sources_extra": [
+      "kadrof"
+    ]
+  },
+  "voiceover": {
+    "name": "Озвучка и дикторы",
+    "fl": "audio-video-photo",
+    "kw": 7,
+    "wl": null,
+    "tg": [],
+    "queries": [
+      "озвучка ролика",
+      "диктор голос",
+      "начитка текста"
+    ],
+    "sources_extra": [
+      "kadrof"
+    ]
+  },
+  "music-sound": {
+    "name": "Музыка и саунд-дизайн",
+    "fl": "audio-video-photo",
+    "kw": 7,
+    "wl": null,
+    "tg": [
+      "sound_jobs"
+    ],
+    "queries": [
+      "написать музыку",
+      "бит на заказ",
+      "звуковое оформление"
+    ],
+    "status": "alive",
+    "sources_extra": [
+      "kadrof"
+    ]
+  },
+  "devops": {
+    "name": "DevOps и серверы",
+    "fl": "programmirovanie/sistemnyj-administrator-programmirovanie",
+    "kw": 11,
+    "wl": null,
+    "tg": [
+      "devops_jobs_feed"
+    ],
+    "queries": [
+      "настройка сервера",
+      "devops",
+      "docker nginx"
+    ],
+    "sources_extra": [
+      "kadrof"
+    ]
+  },
+  "databases": {
+    "name": "Базы данных",
+    "fl": "programmirovanie/programmist-baz-dannyh",
+    "kw": 11,
+    "wl": null,
+    "tg": [],
+    "queries": [
+      "проектирование бд",
+      "sql запросы",
+      "postgres настройка"
+    ],
+    "sources_extra": [
+      "kadrof"
+    ]
+  },
+  "integrations-api": {
+    "name": "Интеграции и API",
+    "fl": "programmirovanie",
+    "kw": 11,
+    "wl": null,
+    "tg": [],
+    "queries": [
+      "интеграция api",
+      "подключить webhook",
+      "обмен данными"
+    ],
+    "sources_extra": [
+      "kadrof"
+    ]
+  },
+  "fullstack-js": {
+    "name": "Веб-программирование (JS/fullstack)",
+    "fl": "programmirovanie/fullstack",
+    "kw": 11,
+    "wl": null,
+    "tg": [
+      "jsdevjob",
+      "jvmjobs",
+      "javascript_jobs_feed"
+    ],
+    "queries": [
+      "react разработка",
+      "vue проект",
+      "fullstack разработчик"
+    ],
+    "sources_extra": [
+      "kadrof"
+    ]
+  },
+  "wordpress-cms": {
+    "name": "WordPress и CMS",
+    "fl": "saity",
+    "kw": 11,
+    "wl": null,
+    "tg": [],
+    "queries": [
+      "wordpress сайт",
+      "tilda переделка",
+      "перенести сайт"
+    ],
+    "sources_extra": [
+      "kadrof"
+    ]
+  },
+  "games-dev": {
+    "name": "Разработка игр",
+    "fl": "games",
+    "kw": 11,
+    "wl": null,
+    "tg": [
+      "devjobs"
+    ],
+    "queries": [
+      "unity разработка",
+      "игровой проект",
+      "мобильная игра"
+    ],
+    "sources_extra": [
+      "kadrof"
+    ]
+  },
+  "consulting": {
+    "name": "Консалтинг и стратегии",
+    "fl": "konsalting",
+    "kw": 83,
+    "wl": null,
+    "tg": [
+      "hireproproduct"
+    ],
+    "queries": [
+      "бизнес консалтинг",
+      "стратегия развития",
+      "аудит процессов"
+    ],
+    "sources_extra": [
+      "kadrof"
+    ]
+  },
+  "leadgen-sales": {
+    "name": "Лидген и продажи",
+    "fl": "reklama-marketing",
+    "kw": 45,
+    "wl": null,
+    "tg": [],
+    "queries": [
+      "лидогенерация",
+      "скрипты продаж",
+      "обзвон базы"
+    ],
+    "sources_extra": [
+      "kadrof"
+    ]
+  },
+  "hr-recruiting": {
+    "name": "HR и подбор",
+    "fl": "konsalting",
+    "kw": 83,
+    "wl": null,
+    "tg": [
+      "freegolup",
+      "HRity",
+      "digital_hr"
+    ],
+    "queries": [
+      "рекрутер на подбор",
+      "hr сопровождение",
+      "закрыть вакансию"
+    ],
+    "sources_extra": [
+      "kadrof"
+    ]
+  },
+  "legal": {
+    "name": "Юридические услуги",
+    "fl": "konsalting",
+    "kw": 83,
+    "wl": null,
+    "tg": [],
+    "queries": [
+      "юрист договор",
+      "проверка документов",
+      "суд"
+    ],
+    "sources_extra": [
+      "kadrof"
+    ]
+  },
+  "finance-accounting": {
+    "name": "Финансы и учёт",
+    "fl": "konsalting",
+    "kw": 83,
+    "wl": null,
+    "tg": [],
+    "queries": [
+      "бухгалтер на аутсорсе",
+      "финансовая модель",
+      "налоги"
+    ],
+    "sources_extra": [
+      "kadrof"
+    ]
+  },
+  "engineering": {
+    "name": "Инженерия и чертежи",
+    "fl": "inzhiniring",
+    "kw": null,
+    "wl": null,
+    "tg": [],
+    "queries": [
+      "чертеж autocad",
+      "расчёт конструкции",
+      "3d модель детали",
+      "проектировщик",
+      "проектная документация",
+      "проект дома",
+      "чертежи",
+      "обследование зданий",
+      "ов вк",
+      "автокад",
+      "расчёт конструкций",
+      "проектирование"
+    ],
+    "sources_extra": [
+      "kadrof",
+      "poisk-pro"
+    ]
+  },
+  "architecture-interior": {
+    "name": "Архитектура и интерьеры",
+    "fl": "dizajn",
+    "kw": 15,
+    "wl": null,
+    "tg": [],
+    "queries": [
+      "дизайн интерьера",
+      "визуализация квартиры",
+      "планировка",
+      "проект интерьера",
+      "дизайн-проект",
+      "визуализация интерьера",
+      "проект дома",
+      "обмерный план",
+      "проект фасада"
+    ],
+    "sources_extra": [
+      "kadrof",
+      "poisk-pro"
+    ]
+  },
+  "crypto-web3": {
+    "name": "Крипто и web3 (англ. вакансии)",
+    "fl": "crypto-i-blockchain",
+    "kw": null,
+    "wl": null,
+    "tg": [
+      "cryptojobslist",
+      "web3hiring"
+    ],
+    "queries": [
+      "smart contract",
+      "solidity",
+      "web3",
+      "blockchain",
+      "crypto"
+    ],
+    "status": "weak-ru",
+    "sources_extra": [
+      "kadrof"
+    ]
+  },
+  "data-science": {
+    "name": "Data Science и ML",
+    "fl": "programmirovanie/mashinnoe-obuchenie",
+    "kw": 11,
+    "wl": null,
+    "tg": [
+      "datasciencejobs"
+    ],
+    "queries": [
+      "машинное обучение",
+      "модель прогноза",
+      "анализ данных"
+    ],
+    "status": "alive",
+    "sources_extra": [
+      "kadrof"
+    ]
+  },
+  "qa-testing": {
+    "name": "QA и тестирование",
+    "fl": "programmirovanie",
+    "kw": 11,
+    "wl": null,
+    "tg": [
+      "forallqa"
+    ],
+    "queries": [
+      "тестирование сайта",
+      "qa специалист",
+      "автотесты"
+    ],
+    "status": "alive",
+    "sources_extra": [
+      "kadrof"
+    ]
+  },
+  "tech-writing": {
+    "name": "Технический контент",
+    "fl": "teksty",
+    "kw": 5,
+    "wl": null,
+    "tg": [],
+    "queries": [
+      "технический писатель",
+      "документация api",
+      "инструкция"
+    ],
+    "sources_extra": [
+      "kadrof"
+    ]
+  },
+  "community-management": {
+    "name": "Администрирование сообществ",
+    "fl": "socialnye-seti",
+    "kw": 45,
+    "wl": "obshchenie-s-klientami",
+    "tg": [],
+    "queries": [
+      "администратор телеграм",
+      "модератор чата",
+      "комьюнити менеджер"
+    ],
+    "sources_extra": [
+      "kadrof"
+    ]
+  },
+  "tutoring": {
+    "name": "Репетиторство и обучение",
+    "fl": null,
+    "kw": 83,
+    "wl": null,
+    "tg": [
+      "poisk_uchenikov",
+      "repetitors_clients"
+    ],
+    "queries": [
+      "репетитор математики",
+      "подготовка к экзамену",
+      "обучение python"
+    ],
+    "status": "alive"
+  },
+  "freelance-mix": {
+    "name": "Фриланс-микс (все заказы)",
+    "fl": null,
+    "kw": null,
+    "wl": null,
+    "tg": [
+      "freelance_zakazy",
+      "freelance7",
+      "frilancekomfort",
+      "onlinevakansii",
+      "rabotka_zdes",
+      "theyseeku",
+      "digitaltender",
+      "kadrof_work"
+    ],
+    "queries": [
+      "фрилансер",
+      "исполнитель нужен"
+    ],
+    "status": "alive"
+  }
+}
