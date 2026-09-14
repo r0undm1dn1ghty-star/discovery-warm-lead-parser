@@ -132,3 +132,8 @@ MIT — свободно, с атрибуцией. Границы — в [`SAFET
   "audience": {"@type": "Audience", "audienceType": "предприниматели, фрилансеры, агентства, ИИ-агенты"}
 }
 </script>
+
+
+## English summary
+
+Warm Lead Parser — open-source tool for finding warm leads from public sources: FL.ru, Kwork, Freelance.ru, Weblancer, Telegram boards, Avito. Scoring 0-100, run economics (cost per lead). Battle-tested: 4407 posts parsed, 49 hot leads, 385 rub per lead. MIT.
