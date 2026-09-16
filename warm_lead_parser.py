@@ -13,7 +13,7 @@
            illustrators.ru · Авито (Camoufox стелс, market-signal).
 freelance.ru исключён: пер-нишевой фильтрации нет (фактчек 09-11).
 """
-import json, re, html, sys, os, time
+import json, re, html, sys, os, time, socket
 import urllib.request
 from datetime import datetime, timezone, timedelta
 from urllib.parse import quote
@@ -32,7 +32,11 @@ def load_niches():
     print("!! niches-50.json не найден рядом с движком"); sys.exit(1)
 
 # ---------------------------------------------------------------- http
-def get(u, timeout=25, headers=None):
+# v2.3: единый потолок ожидания на сокете. Один зависший источник (FL.ru по
+# таймауту на баттлтесте 16.09.2026) не должен сжрать бюджет всего прогона.
+socket.setdefaulttimeout(12)
+
+def get(u, timeout=12, headers=None):
     req = urllib.request.Request(u, headers=headers or UA)
     return urllib.request.urlopen(req, timeout=timeout).read().decode("utf-8", "ignore")
 
@@ -64,7 +68,7 @@ def fetch_kwork(cat_id, niche_key):
     out = []
     req = urllib.request.Request(f"https://r.jina.ai/https://kwork.ru/projects?c={cat_id}",
                                  headers={"User-Agent": "Mozilla/5.0"})
-    raw = urllib.request.urlopen(req, timeout=60).read().decode("utf-8", "ignore")
+    raw = urllib.request.urlopen(req, timeout=25).read().decode("utf-8", "ignore")
     items = re.findall(r'\[([^\]]{20,100})\]\(https://kwork\.ru/projects/(\d+)[^)]*\)', raw)
     seen = set()
     for t, pid in items:
