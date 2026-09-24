@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 480" width="480" height="480">
+  <!-- DISCOVERY WARM LEAD PARSER — знак: терминальный курсор-радар на индиго -->
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#141745"/>
+      <stop offset="1" stop-color="#0B0D3B"/>
+    </linearGradient>
+  </defs>
+  <!-- фон -->
+  <rect width="480" height="480" rx="96" fill="url(#bg)"/>
+  <!-- сетка сигналов (тонкая, 3 линии-эхо радара) -->
+  <g stroke="#3A3F7A" stroke-width="2" opacity="0.55" fill="none">
+    <path d="M 96 240 A 144 144 0 0 1 240 96"/>
+    <path d="M 60 240 A 180 180 0 0 1 240 60"/>
+    <path d="M 132 240 A 108 108 0 0 1 240 132"/>
+  </g>
+  <!-- оси-крестовина -->
+  <g stroke="#3A3F7A" stroke-width="2" opacity="0.4">
+    <line x1="240" y1="76" x2="240" y2="404"/>
+    <line x1="76" y1="240" x2="404" y2="240"/>
+  </g>
+  <!-- сигнал: точки (лиды на радаре) -->
+  <g fill="#FFB224">
+    <circle cx="316" cy="164" r="9"/>
+    <circle cx="352" cy="240" r="7" opacity="0.85"/>
+    <circle cx="286" cy="310" r="6" opacity="0.6"/>
+  </g>
+  <!-- яркие статусы -->
+  <circle cx="188" cy="152" r="4" fill="#3DDC84"/>
+  <circle cx="332" cy="330" r="4" fill="#3DDC84"/>
+  <!-- терминальный курсор — сердце знака -->
+  <rect x="228" y="228" width="24" height="24" fill="#FFB224"/>
+  <!-- строка промпта под курсором -->
+  <rect x="228" y="270" width="56" height="6" rx="3" fill="#7A80C9" opacity="0.9"/>
+</svg>
