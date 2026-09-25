@@ -123,35 +123,50 @@ def is_vacancy(txt: str) -> bool:
 def _kw_match(low, kws):
     """Совпадение ключевых слов ниши с морфологией.
 
-    Найдено на реальных данных FL.ru: «спарсить» не матчилось с «парсер»,
-    «Telegram» — с «телеграм», «amoCRM» — с «crm». Правила:
-      - длинный ключ (5+) — по СТЕМУ (без хвоста): «парсер»→«парс» ловит «спарсить»;
-      - короткий ключ (<=4) — по границе слова, иначе «ии» ловится в «анализ»;
-      - латиница/кириллица — через нормализацию (telegram↔телеграм).
-    Возвращает список совпавших ключей.
+    Правила подобраны на реальных данных FL.ru:
+      - длинный ключ (5+) — по корню с учётом приставок: «парсер»→«парс»
+        ловит «спарсить», «парсинг», «парсера»;
+      - короткий ключ (3–4) — по границе слова с учётом окончаний:
+        «бот» ловит «бота», «боты», но не «работа»;
+      - совсем короткий (<=2) или с цифрой — только точное слово:
+        «ии» не ловится внутри «функции», «1с» — отдельно;
+      - ё/е и латиница/кириллица нормализуются (telegram↔телеграм).
+    Возвращает совпавшие ключи без дублей по корню.
     """
-    def stem(k):
-        # отбрасываем частые русские окончания, оставляя корень
-        return re.sub(r"(ами|ями|иями|ов|ев|ий|ый|ой|ая|ые|ые|ing|ers|er|s)$", "", k)
+    _PREFIX = r"(?:с|со|по|за|на|от|до|пере|про|вы|при|у|из|раз|об|под|над|пред|без|не)?"
 
-    norm = low
-    for lat, cyr in (("telegram", "телеграм"), ("python", "питон"), ("wordpress", "вордпресс")):
-        if lat in norm:
-            norm = norm + " " + cyr
+    def _stem(k):
+        return re.sub(
+            r"(иями|ами|ями|ание|ания|аний|ение|ения|ений|ация|ации|ность|ство|"
+            r"инг|ист|изм|ац|яц|иц|ер|ор|ар|ир|ов|ев|ий|ый|ой|ая|ые|"
+            r"ing|ers|er|s|а|я|ы|и|е|у|о|ь)$", "", k)
 
-    hits = []
+    norm = low.replace("ё", "е")
+    for lat, cyr in (("telegram", "телеграм"), ("python", "питон"),
+                     ("wordpress", "вордпресс"), ("whatsapp", "ватсап")):
+        if lat in norm or cyr in norm:
+            norm += " " + lat + " " + cyr
+
+    hits, seen = [], set()
     for k in (kws or []):
-        k = k.strip().lower()
+        k = k.strip().lower().replace("ё", "е")
         if not k:
             continue
-        if len(k) <= 4:
-            # короткое: отдельное слово ИЛИ внутри латинского составного (amoCRM -> crm)
-            if re.search(r"(?<![а-яёa-z0-9])" + re.escape(k) + r"(?![а-яёa-z0-9])", norm) \
-               or (k.isascii() and re.search(r"[a-z]" + re.escape(k), norm)):
-                hits.append(k)
+        found = False
+        if len(k) <= 2 or any(c.isdigit() for c in k):
+            found = bool(re.search(r"(?<![а-яёa-z0-9])" + re.escape(k) + r"(?![а-яёa-z0-9])", norm))
+        elif len(k) <= 4:
+            st = _stem(k)
+            found = bool(re.search(r"(?<![а-яёa-z0-9])" + re.escape(st) + r"[а-яё]{0,3}(?![а-яёa-z0-9])", norm))
+            if not found and k.isascii():
+                found = bool(re.search(r"[a-z]" + re.escape(k), norm))
         else:
-            st = stem(k)
-            if re.search(r"(?<![а-яёa-z0-9])" + re.escape(st), norm):
+            st = _stem(k)
+            found = bool(re.search(r"(?<![а-яёa-z0-9])" + _PREFIX + re.escape(st), norm))
+        if found:
+            root = _stem(k)
+            if root not in seen:
+                seen.add(root)
                 hits.append(k)
     return hits
 
