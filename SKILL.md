@@ -1,7 +1,7 @@
 ---
 name: warm-lead-parser
 description: "Парсер тёплых лидов из открытых источников, скоринг 0-100"
-version: 1.0.0
+version: 2.5.0
 author: Victor Zaitsev (r0undm1dn1ghty-star)
 license: MIT
 platforms: [linux, macos, windows]

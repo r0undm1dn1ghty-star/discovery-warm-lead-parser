@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Discovery Warm Lead Parser v2.4 — мульти-нишевой движок.
+"""Discovery Warm Lead Parser v2.5 — мульти-нишевой движок.
 Один файл, stdlib-only. 53 ниши из niches-50.json (все источники фактчек-2026-09-11).
 
 Запуск:
@@ -19,8 +19,13 @@ from datetime import datetime, timezone, timedelta
 from urllib.parse import quote
 
 MSK = timezone(timedelta(hours=3))
-UA = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/126.0",
-      "Accept-Language": "ru,en;q=0.8"}
+# Полный набор браузерных заголовков: часть источников (kadrof, illustrators)
+# отдаёт контент только при полном наборе — иначе соединение висит до таймаута.
+UA = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+                    "(KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
+      "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+      "Accept-Language": "ru-RU,ru;q=0.9,en;q=0.8",
+      "Accept-Encoding": "gzip, deflate"}
 HERE = os.path.dirname(os.path.abspath(__file__))
 
 # ---------------------------------------------------------------- конфиг ниш
@@ -33,49 +38,138 @@ def load_niches():
 
 # ---------------------------------------------------------------- http
 # v2.3: единый потолок ожидания на сокете. Один зависший источник (FL.ru по
-# таймауту на баттлтесте 16.09.2026) не должен сжрать бюджет всего прогона.
+# таймауту) не должен сжрать бюджет всего прогона.
 socket.setdefaulttimeout(12)
 
 def get(u, timeout=12, headers=None):
-    req = urllib.request.Request(u, headers=headers or UA)
-    return urllib.request.urlopen(req, timeout=timeout).read().decode("utf-8", "ignore")
+    """GET с одним повтором: первый контакт со свежего соединения
+    у части источников может подвиснуть — повтор проходит мгновенно."""
+    last = None
+    for attempt in (0, 1):
+        try:
+            req = urllib.request.Request(u, headers=headers or UA)
+            r = urllib.request.urlopen(req, timeout=timeout)
+            data = r.read()
+            if r.headers.get("Content-Encoding") == "gzip":
+                import gzip as _gz
+                data = _gz.decompress(data)
+            return data.decode("utf-8", "ignore")
+        except Exception as e:
+            last = e
+            if attempt == 0:
+                time.sleep(0.4)
+    raise last
 
 # ---------------------------------------------------------------- сборщики
 def fetch_fl(category, niche_key):
+    """FL.ru: карточки проектов. Читаем заголовок + бюджет + описание,
+    иначе скоринг не видит деньги и детали (проверено на живых данных)."""
     out = []
     raw = get(f"https://www.fl.ru/projects/category/{category}/")
-    pairs = re.findall(r'href="(/projects/\d+/[^"]+)"[^>]*>([^<]{20,})</a>', raw)
     seen = set()
-    for u, t in pairs:
-        if u in seen: continue
+    for card in re.split(r'id="project-item', raw)[1:]:
+        mt = re.search(r'b-post__title[^"]*"[^>]*>\s*<a[^>]*href="(/projects/\d+/[^"]+)"[^>]*>([^<]+)</a>', card)
+        if not mt:
+            continue
+        u, title = mt.group(1), mt.group(2)
+        if u in seen:
+            continue
         seen.add(u)
+        mp = re.search(r'b-post__price[^>]*>\s*(?:<span[^>]*>)?([^<]{0,60})', card)
+        md = re.search(r'b-post__txt[^>]*>([^<]{0,600})', card)
+        parts = [html.unescape(re.sub(r'\s+', ' ', title)).strip()]
+        if mp:
+            parts.append(html.unescape(re.sub(r'\s+', ' ', mp.group(1))).strip())
+        if md:
+            parts.append(html.unescape(re.sub(r'\s+', ' ', md.group(1))).strip())
+        text = " | ".join(p for p in parts if p)
+        if len(text) < 20:
+            continue
         out.append({"source": f"fl.ru/{niche_key}", "time": "",
-                    "text": html.unescape(re.sub(r'\s+', ' ', t)).strip(),
+                    "text": text[:600],
                     "url": "https://www.fl.ru" + u})
     return out
 
 def fetch_weblancer(slug, niche_key):
+    """Weblancer: лента заказов /freelance/ (+ фильтр по нише на стороне клиента).
+    Категорийные слаги переехали — берём общую ленту, нишу фильтрует скоринг."""
     out = []
-    raw = get(f"https://www.weblancer.net/freelance/{slug}/")
-    cards = re.findall(r'href="(/freelance/[^"]+)"[^>]*>([^<]+)</a></h2></div><p[^>]*>([^<]+)</p>', raw)
-    for u, t, d in cards[:50]:
-        out.append({"source": f"weblancer/{niche_key}", "time": "",
-                    "text": html.unescape(t).strip() + " | " + html.unescape(d).strip()[:250],
+    raw = get("https://www.weblancer.net/freelance/", timeout=25)
+    seen = set()
+    for m in re.finditer(
+            r'<h2[^>]*>\s*<a[^>]*href="(/freelance/[^"]+/)"[^>]*>([^<]+)</a>\s*</h2>'
+            r'\s*</div>\s*<p[^>]*>(.*?)</p>', raw, re.S):
+        u, t, d = m.group(1), m.group(2), m.group(3)
+        if u in seen:
+            continue
+        seen.add(u)
+        title = html.unescape(re.sub(r'\s+', ' ', t)).strip()
+        desc = html.unescape(re.sub(r'<[^>]+>', ' ', d))
+        desc = re.sub(r'\s+', ' ', desc).strip()
+        tail = raw[m.end():m.end() + 1500]
+        mb = re.search(r'([\d\s]{3,9})\s*(?:₽|руб)', tail)
+        parts = [title]
+        if mb:
+            parts.append(re.sub(r'\s+', ' ', mb.group(0)).strip())
+        if desc:
+            parts.append(desc[:300])
+        text = " | ".join(x for x in parts if x)
+        if len(text) < 20:
+            continue
+        out.append({"source": f"weblancer/{niche_key}", "time": "", "text": text[:600],
                     "url": "https://www.weblancer.net" + u})
     return out
 
 def fetch_kwork(cat_id, niche_key):
+    """Kwork: страница категории отдаёт проекты встроенным JSON (wants).
+    Парсим JSON-структуру напрямую — заголовок, бюджет, описание."""
     out = []
-    req = urllib.request.Request(f"https://r.jina.ai/https://kwork.ru/projects?c={cat_id}",
-                                 headers={"User-Agent": "Mozilla/5.0"})
-    raw = urllib.request.urlopen(req, timeout=25).read().decode("utf-8", "ignore")
-    items = re.findall(r'\[([^\]]{20,100})\]\(https://kwork\.ru/projects/(\d+)[^)]*\)', raw)
+    raw = ""
+    try:
+        raw = get(f"https://kwork.ru/projects?c={cat_id}", timeout=25)
+    except Exception:
+        pass
+    if '"wants"' not in raw:
+        try:
+            req = urllib.request.Request(f"https://r.jina.ai/https://kwork.ru/projects?c={cat_id}",
+                                         headers={"User-Agent": "Mozilla/5.0"})
+            raw = urllib.request.urlopen(req, timeout=25).read().decode("utf-8", "ignore")
+        except Exception:
+            return out
     seen = set()
-    for t, pid in items:
-        if pid in seen or len(t.strip()) < 20: continue
-        seen.add(pid)
-        out.append({"source": f"kwork/{niche_key}", "time": "", "text": t.strip(),
-                    "url": "https://kwork.ru/projects/" + pid})
+    i = raw.find('"wants":[')
+    if i >= 0:
+        # декодируем ровно один JSON-массив начиная с '[' (корректно снимает \uXXXX)
+        arr = raw[raw.find('[', i):]
+        try:
+            wants = json.JSONDecoder().raw_decode(arr)[0]
+        except Exception:
+            wants = []
+        for w in wants if isinstance(wants, list) else []:
+            if not isinstance(w, dict):
+                continue
+            pid = str(w.get("id") or "")
+            title = (w.get("title") or w.get("name") or "").strip()
+            desc = (w.get("description") or "").strip()
+            price = w.get("possiblePriceLimit") or 0
+            if not pid or pid in seen or len(title) < 8:
+                continue
+            seen.add(pid)
+            try:
+                budget = "до %s ₽" % format(int(price), ",d").replace(",", " ") if int(price) > 0 else ""
+            except Exception:
+                budget = ""
+            parts = [title, budget, desc[:400]]
+            text = " | ".join(x for x in parts if x)
+            out.append({"source": f"kwork/{niche_key}", "time": "", "text": text[:600],
+                        "url": "https://kwork.ru/projects/" + pid})
+    if not out:
+        for t, pid in re.findall(r'\[([^\]]{20,100})\]\(https://kwork\.ru/projects/(\d+)[^)]*\)', raw):
+            if pid in seen or len(t.strip()) < 20:
+                continue
+            seen.add(pid)
+            out.append({"source": f"kwork/{niche_key}", "time": "", "text": t.strip(),
+                        "url": "https://kwork.ru/projects/" + pid})
     return out
 
 def fetch_poisk_pro(pages=2, niche_key="engineering"):
@@ -129,7 +223,7 @@ def fetch_illustrators(niche_key="illustration-3d"):
     """illustrators.ru/jobs — заказы иллюстраций с бюджетами, без логина (фактчек 09-11)."""
     out = []
     try:
-        raw = get("https://illustrators.ru/jobs")
+        raw = get("https://illustrators.ru/jobs", timeout=25)
     except Exception:
         return out
     cards = re.findall(r'<a class="job-card__link" href="(/jobs/[^"]+)">\s*'
@@ -183,20 +277,42 @@ def fetch_avito(queries, niche_key):
 
 
 def fetch_kadrof(pages=3, niche_key="mix"):
-    """Kadrof.ru — свежие заказы и вакансии с датами и бюджетами, без логина (фактчек 09-11)."""
+    """Kadrof.ru — свежие заказы, без логина. Раздел: /work.
+    Карточки: div.post.project-list с заголовком h6>a, бюджетом и описанием."""
     out = []
     for page in range(1, pages + 1):
         try:
-            raw = get(f"https://www.kadrof.ru/work?page={page}")
+            raw = get(f"https://kadrof.ru/work?page={page}", timeout=25)
         except Exception:
             break
-        cards = re.findall(r'href="(/work/\d+)"[^>]*>(?:\s*<[^>]*>)*\s*([^<]{8,100})', raw)
-        dates = re.findall(r'(\d{2}\.\d{2}\.\d{4} в \d{2}:\d{2})', raw)
-        for (u, t), d in zip(cards, dates + [""] * len(cards)):
-            out.append({"source": f"kadrof/{niche_key}", "time": "",
-                        "text": f"{t.strip()} | {d}" if d else t.strip(),
-                        "url": "https://www.kadrof.ru" + u})
-        if len(cards) < 5:
+        seen = set()
+        # разбиваем на карточки по маркеру списка проектов
+        for card in re.split(r'<div class="post project-list">', raw)[1:]:
+            mt = re.search(r'href="(/work/\d+)"[^>]*>([^<]{5,140})<', card)
+            if not mt:
+                continue
+            u, t = mt.group(1), html.unescape(mt.group(2)).strip()
+            if u in seen:
+                continue
+            seen.add(u)
+            mb = re.search(r'class="(?:fix-)?budget"[^>]*>(?:<span[^>]*>)?([^<]{0,40})', card)
+            md = re.search(r'<div class="project-info">', card)
+            body = re.sub(r'<[^>]+>', ' ', card[:md.start()] if md else card)
+            body = html.unescape(re.sub(r'\s+', ' ', body)).strip()
+            body = body.replace(t, '', 1).strip()
+            parts = [t]
+            if mb:
+                b = html.unescape(re.sub(r'\s+', ' ', mb.group(1))).strip()
+                if b and b not in ("—", "-", "0"):
+                    parts.append(b)
+            if body:
+                parts.append(body[:400])
+            text = " | ".join(p for p in parts if p)
+            if len(text) < 20:
+                continue
+            out.append({"source": f"kadrof/{niche_key}", "time": "", "text": text[:600],
+                        "url": "https://kadrof.ru" + u})
+        if not out:
             break
     return out
 
@@ -210,15 +326,14 @@ KW_CACHE = {}
 HR_MARKS = ("#вакансия", "в команду", "в штат", "з/п", "зарплат", "оклад",
             "собеседовани", "оформление по", "тк рф", "график работ", "ищем",
             "оплату обсуждаем при собеседовании")
-# v2.4: HR-структура вакансии — у заказа нет «Задачи/Требования/Условия» списком.
+# HR-структура вакансии — у заказа нет «Задачи/Требования/Условия» списком.
 # Формат без двоеточия («Задачи 10-15 статей») тоже ловим: слово + цифры/перенос.
 HR_STRUCT = ("задачи", "требования", "условия", "что мы предлагаем", "опыт работы")
 # «ищет/ищу команду/в поисках» — вариации «ищем»
 HR_SOFT = ("ищет ", "ищу ", "в поисках", "открыта вакансия", "на проектную работу")
 
 # зарплатная вилка: «от 150 000 ₽/руб/руб./рублей/р.», диапазоны «от X до Y».
-# v2.4: раньше регекс ловил только ₽|руб и требовал «от» — «От 150 000 р.» проходил
-# фильтр и вакансии утекали в тёплые лиды (баг из баттлтеста 17.09.2026).
+# Покрываем все формы записи суммы, включая сокращение «р.».
 SALARY_RE = re.compile(
     r"(?:от\s*)?(\d[\d\s\u00a0.,]{2,12}?)\s*(?:до\s*[\d\s\u00a0.,]{2,12}?\s*)?(?:₽|руб\.?|рублей|р\.)"
 )
@@ -243,8 +358,49 @@ def is_vacancy(txt):
             n += 2
     return n >= 2
 
+_PREFIX = r"(?:с|со|по|за|на|от|до|пере|про|вы|при|у|из|раз|об|под|над|пред|без|не)?"
+
+def _stem(k):
+    return re.sub(
+        r"(иями|ами|ями|ание|ания|аний|ение|ения|ений|ация|ации|ность|ство|"
+        r"инг|ист|изм|ац|яц|иц|ер|ор|ар|ир|ов|ев|ий|ый|ой|ая|ые|"
+        r"ing|ers|er|s|а|я|ы|и|е|у|о|ь)$", "", k)
+
 def kw_search(txt, kws):
-    return [k for k in kws if re.search(r'(?<![а-яa-z0-9])' + re.escape(k) + r'(?![а-яa-z0-9])', txt)]
+    """Совпадение ключей ниши с морфологией (та же логика, что в integrations/sources.py).
+
+    - длинный ключ (5+) — по корню с приставками: «парсер» ловит «спарсить», «парсинг»;
+    - короткий (3–4) — по границе слова с окончаниями: «бот» ловит «бота», но не «работа»;
+    - совсем короткий (<=2) или с цифрой — точное слово: «ии» не ловится в «функции»;
+    - ё/е и латиница/кириллица нормализуются (telegram↔телеграм).
+    """
+    norm = txt.replace("ё", "е")
+    for lat, cyr in (("telegram", "телеграм"), ("python", "питон"),
+                     ("wordpress", "вордпресс"), ("whatsapp", "ватсап")):
+        if lat in norm or cyr in norm:
+            norm += " " + lat + " " + cyr
+    hits, seen = [], set()
+    for k in (kws or []):
+        k = k.strip().lower().replace("ё", "е")
+        if not k:
+            continue
+        found = False
+        if len(k) <= 2 or any(c.isdigit() for c in k):
+            found = bool(re.search(r"(?<![а-яёa-z0-9])" + re.escape(k) + r"(?![а-яёa-z0-9])", norm))
+        elif len(k) <= 4:
+            st = _stem(k)
+            found = bool(re.search(r"(?<![а-яёa-z0-9])" + re.escape(st) + r"[а-яё]{0,3}(?![а-яёa-z0-9])", norm))
+            if not found and k.isascii():
+                found = bool(re.search(r"[a-z]" + re.escape(k), norm))
+        else:
+            st = _stem(k)
+            found = bool(re.search(r"(?<![а-яёa-z0-9])" + _PREFIX + re.escape(st), norm))
+        if found:
+            root = _stem(k)
+            if root not in seen:
+                seen.add(root)
+                hits.append(k)
+    return hits
 
 def build_kws(niche):
     """Ключевые слова ниши = имя + queries. strong = точные формулировки ниши."""
@@ -271,6 +427,7 @@ def score_post(p, kws):
     strong, med = kw_search(txt, kws["strong"]), kw_search(txt, kws["medium"])
     s, why = 0, []
     if strong: s += 40; why.append(f"точное: {', '.join(strong[:3])}")
+    elif len(med) >= 2: s += 30; why.append(f"ниша по деталям: {', '.join(med[:3])}")
     elif med: s += 15; why.append(f"смежное: {', '.join(med[:3])}")
     else: return 0, "не ниша"
     for cat, keys, pts in (("urgent", ["срочно", "сегодня", "завтра", "asap", "горящ"], 15),
